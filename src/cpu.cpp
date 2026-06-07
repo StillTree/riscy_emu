@@ -1,8 +1,10 @@
 #include "cpu.hpp"
 
+#include "typedefs.hpp"
+
 namespace riscy_emu {
 
-auto cpu_state::set_reg(size_t reg, int64_t val)
+auto cpu_state::set_reg(usz reg, i64 val)
 {
 	if (reg <= 0) {
 		return;
@@ -11,7 +13,7 @@ auto cpu_state::set_reg(size_t reg, int64_t val)
 	registers[reg] = val;
 }
 
-auto cpu_state::get_reg(size_t reg) -> int64_t
+auto cpu_state::get_reg(usz reg) -> i64
 {
 	return registers[reg];
 }

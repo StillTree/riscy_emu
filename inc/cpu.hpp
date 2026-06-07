@@ -1,18 +1,17 @@
 #pragma once
 
+#include "typedefs.hpp"
 #include <array>
-#include <cstdint>
 
 namespace riscy_emu {
 
 struct cpu_state {
-	std::array<int64_t, 32> registers { };
-	uint64_t pc { 0 };
+	std::array<i64, 32> registers { };
+	u64 pc { 0 };
 
 private:
-	auto set_reg(size_t reg, int64_t val);
-
-	auto get_reg(size_t reg) -> int64_t;
+	auto set_reg(usz reg, i64 val);
+	auto get_reg(usz reg) -> i64;
 };
 
 }
