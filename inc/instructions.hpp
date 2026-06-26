@@ -1,153 +1,74 @@
 #pragma once
 
-#include <cstdlib>
-#include <typedefs.hpp>
-#include <variant>
+#include "cpu.hpp"
 
-namespace riscy_emu {
+namespace riscy_emu::inst {
 
-struct encoding_s {
-	u8 rs1;
-	u8 rs2;
-	i64 imm;
+using handler = void (*)(cpu_state& cpu_state, u32 raw);
 
-	explicit encoding_s(u32 inst);
-};
+// Base
 
-struct encoding_b {
-	u8 rs1;
-	u8 rs2;
-	i64 imm;
+auto addi(cpu_state& cpu_state, u32 raw) -> void;
+auto slti(cpu_state& cpu_state, u32 raw) -> void;
+auto sltiu(cpu_state& cpu_state, u32 raw) -> void;
+auto xori(cpu_state& cpu_state, u32 raw) -> void;
+auto ori(cpu_state& cpu_state, u32 raw) -> void;
+auto andi(cpu_state& cpu_state, u32 raw) -> void;
+auto slli(cpu_state& cpu_state, u32 raw) -> void;
+auto srai(cpu_state& cpu_state, u32 raw) -> void;
+auto srli(cpu_state& cpu_state, u32 raw) -> void;
+auto addiw(cpu_state& cpu_state, u32 raw) -> void;
+auto slliw(cpu_state& cpu_state, u32 raw) -> void;
+auto sraiw(cpu_state& cpu_state, u32 raw) -> void;
+auto srliw(cpu_state& cpu_state, u32 raw) -> void;
+auto lui(cpu_state& cpu_state, u32 raw) -> void;
+auto auipc(cpu_state& cpu_state, u32 raw) -> void;
+auto add(cpu_state& cpu_state, u32 raw) -> void;
+auto sub(cpu_state& cpu_state, u32 raw) -> void;
+auto slt(cpu_state& cpu_state, u32 raw) -> void;
+auto sltu(cpu_state& cpu_state, u32 raw) -> void;
+auto xor_(cpu_state& cpu_state, u32 raw) -> void;
+auto or_(cpu_state& cpu_state, u32 raw) -> void;
+auto and_(cpu_state& cpu_state, u32 raw) -> void;
+auto sll(cpu_state& cpu_state, u32 raw) -> void;
+auto srl(cpu_state& cpu_state, u32 raw) -> void;
+auto sra(cpu_state& cpu_state, u32 raw) -> void;
+auto addw(cpu_state& cpu_state, u32 raw) -> void;
+auto subw(cpu_state& cpu_state, u32 raw) -> void;
+auto sllw(cpu_state& cpu_state, u32 raw) -> void;
+auto srlw(cpu_state& cpu_state, u32 raw) -> void;
+auto sraw(cpu_state& cpu_state, u32 raw) -> void;
+auto jal(cpu_state& cpu_state, u32 raw) -> void;
+auto jalr(cpu_state& cpu_state, u32 raw) -> void;
+auto beq(cpu_state& cpu_state, u32 raw) -> void;
+auto bne(cpu_state& cpu_state, u32 raw) -> void;
+auto blt(cpu_state& cpu_state, u32 raw) -> void;
+auto bge(cpu_state& cpu_state, u32 raw) -> void;
+auto bltu(cpu_state& cpu_state, u32 raw) -> void;
+auto bgeu(cpu_state& cpu_state, u32 raw) -> void;
+auto lb(cpu_state& cpu_state, u32 raw) -> void;
+auto lbu(cpu_state& cpu_state, u32 raw) -> void;
+auto lh(cpu_state& cpu_state, u32 raw) -> void;
+auto lhu(cpu_state& cpu_state, u32 raw) -> void;
+auto lw(cpu_state& cpu_state, u32 raw) -> void;
+auto lwu(cpu_state& cpu_state, u32 raw) -> void;
+auto ld(cpu_state& cpu_state, u32 raw) -> void;
+auto sb(cpu_state& cpu_state, u32 raw) -> void;
+auto sh(cpu_state& cpu_state, u32 raw) -> void;
+auto sw(cpu_state& cpu_state, u32 raw) -> void;
+auto sd(cpu_state& cpu_state, u32 raw) -> void;
+auto fence(cpu_state& cpu_state, u32 raw) -> void;
+auto ecall(cpu_state& cpu_state, u32 raw) -> void;
+auto ebreak(cpu_state& cpu_state, u32 raw) -> void;
+auto mret(cpu_state& cpu_state, u32 raw) -> void;
 
-	explicit encoding_b(u32 inst);
-};
+// Zicsr
 
-struct encoding_j {
-	u8 rd;
-	i64 imm;
-
-	explicit encoding_j(u32 inst);
-};
-
-struct encoding_i {
-	u8 rd;
-	u8 rs1;
-	i64 imm;
-
-	explicit encoding_i(u32 inst);
-};
-
-struct encoding_i_shifts {
-	u8 rd;
-	u8 rs1;
-	u8 shamt;
-	i64 imm;
-
-	explicit encoding_i_shifts(u32 inst);
-};
-
-struct encoding_u {
-	u8 rd;
-	i64 imm;
-
-	explicit encoding_u(u32 inst);
-};
-
-struct encoding_r {
-	u8 rd;
-	u8 rs1;
-	u8 rs2;
-
-	explicit encoding_r(u32 inst);
-};
-
-enum class op : u8 {
-	addi,
-	slti,
-	sltiu,
-	xori,
-	ori,
-	andi,
-	slli,
-	srai,
-	srli,
-	addiw,
-	slliw,
-	sraiw,
-	srliw,
-	lui,
-	auipc,
-	add,
-	sub,
-	slt,
-	sltu,
-	xor_,
-	or_,
-	and_,
-	sll,
-	srl,
-	sra,
-	addw,
-	subw,
-	sllw,
-	srlw,
-	sraw,
-	jal,
-	jalr,
-	beq,
-	bne,
-	blt,
-	bge,
-	bltu,
-	bgeu,
-	lb,
-	lbu,
-	lh,
-	lhu,
-	lw,
-	lwu,
-	ld,
-	sb,
-	sh,
-	sw,
-	sd,
-	fence,
-	ecall,
-	ebreak,
-	mret,
-	csrrw,
-	csrrs,
-	csrrc,
-	csrrwi,
-	csrrsi,
-	csrrci,
-};
-
-using inst_data = std::variant<encoding_s, encoding_b, encoding_j, encoding_i, encoding_i_shifts, encoding_u, encoding_r>;
-
-struct inst {
-	op op;
-	inst_data data;
-};
-
-namespace opcode {
-
-	constexpr u8 IMM = 0b0010011;
-	constexpr u8 IMM32 = 0b0011011;
-	constexpr u8 LUI = 0b0110111;
-	constexpr u8 AUIPC = 0b0010111;
-	constexpr u8 OP = 0b0110011;
-	constexpr u8 OP32 = 0b0111011;
-	constexpr u8 JAL = 0b1101111;
-	constexpr u8 JALR = 0b1100111;
-	constexpr u8 BRANCH = 0b1100011;
-	constexpr u8 LOAD = 0b0000011;
-	constexpr u8 STORE = 0b0100011;
-	constexpr u8 MISC_MEM = 0b0001111;
-	constexpr u8 SYSTEM = 0b1110011;
-
-}
-
-auto decode(u32 raw) -> inst;
+auto csrrw(cpu_state& cpu_state, u32 raw) -> void;
+auto csrrs(cpu_state& cpu_state, u32 raw) -> void;
+auto csrrc(cpu_state& cpu_state, u32 raw) -> void;
+auto csrrwi(cpu_state& cpu_state, u32 raw) -> void;
+auto csrrsi(cpu_state& cpu_state, u32 raw) -> void;
+auto csrrci(cpu_state& cpu_state, u32 raw) -> void;
 
 }
