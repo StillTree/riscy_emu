@@ -18,4 +18,6 @@ using i64 = std::int64_t;
 using usz = std::size_t;
 using isz = std::ptrdiff_t;
 
+using addr = u64;
+
 }

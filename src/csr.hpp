@@ -56,7 +56,7 @@ struct csr_state {
 	[[nodiscard]] auto read(u16 addr) const -> u64;
 
 private:
-	mstatus mstatus { };
+	struct mstatus mstatus { };
 	u64 mcause { 0 };
 	u64 mepc { 0 };
 	u64 mtvec { 0 };

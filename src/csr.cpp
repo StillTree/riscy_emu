@@ -54,26 +54,28 @@ auto mstatus::read_m() const -> u64
 auto csr_state::write(u16 addr, u64 val) -> void
 {
 	switch (addr) {
-	case csr::addr::SATP:
-	case csr::addr::PMPADDR0:
-	case csr::addr::PMPCFG0:
-	case csr::addr::MIE:
-	case csr::addr::MEDELEG:
-	case csr::addr::MIDELEG:
+		using namespace csr::addr;
+
+	case SATP:
+	case PMPADDR0:
+	case PMPCFG0:
+	case MIE:
+	case MEDELEG:
+	case MIDELEG:
 		break;
-	case csr::addr::MSTATUS:
+	case MSTATUS:
 		mstatus.write_m(val);
 		break;
-	case csr::addr::MTVEC:
+	case MTVEC:
 		mtvec = val;
 		break;
-	case csr::addr::MCAUSE:
+	case MCAUSE:
 		mcause = val;
 		break;
-	case csr::addr::MEPC:
+	case MEPC:
 		mepc = val;
 		break;
-	case csr::addr::MNSTATUS:
+	case MNSTATUS:
 		mnstatus = val;
 		break;
 	default:
@@ -84,19 +86,21 @@ auto csr_state::write(u16 addr, u64 val) -> void
 auto csr_state::read(u16 addr) const -> u64
 {
 	switch (addr) {
-	case csr::addr::MSTATUS:
+		using namespace csr::addr;
+
+	case MSTATUS:
 		return mstatus.read_m();
-	case csr::addr::MISA:
-	case csr::addr::MHARTID:
-	case csr::addr::SATP:
+	case MISA:
+	case MHARTID:
+	case SATP:
 		return 0;
-	case csr::addr::MTVEC:
+	case MTVEC:
 		return mtvec;
-	case csr::addr::MCAUSE:
+	case MCAUSE:
 		return mcause;
-	case csr::addr::MEPC:
+	case MEPC:
 		return mepc;
-	case csr::addr::MNSTATUS:
+	case MNSTATUS:
 		return mnstatus;
 	default:
 		std::abort();
