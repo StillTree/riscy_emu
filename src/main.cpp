@@ -1,13 +1,11 @@
 #include <print>
 
-#include "cpu.hpp"
+#include "machine.hpp"
 #include "typedefs.hpp"
-#include "mem_bus.hpp"
 
 auto main() -> riscy_emu::i32
 {
-	riscy_emu::mem_bus a;
-	riscy_emu::cpu_state cpu;
-
+	riscy_emu::machine m;
+	m.run();
 	std::println("Hello, World!");
 }
