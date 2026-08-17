@@ -14,11 +14,13 @@ FetchContent_Declare(gsl GIT_REPOSITORY https://github.com/microsoft/GSL GIT_TAG
 FetchContent_MakeAvailable(gsl)
 
 set(SOURCE_DIR "src")
+set(INCLUDE_DIR ${SOURCE_DIR})
 
 file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
-file(GLOB_RECURSE INCLUDE_FILES CONFIGURE_DEPENDS "${SOURCE_DIR}/*.hpp")
+file(GLOB_RECURSE INCLUDE_FILES CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${INCLUDE_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE Microsoft.GSL::GSL)
+target_compile_definitions(${PROJECT_NAME} PRIVATE RISCY_VERSION=${PROJECT_VERSION})

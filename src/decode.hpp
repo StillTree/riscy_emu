@@ -213,6 +213,6 @@ namespace opcode {
 
 }
 
-auto decode(u32 raw) -> inst::handler;
+[[nodiscard]] auto decode_inst(u32 raw) -> inst::handler;
 
 }

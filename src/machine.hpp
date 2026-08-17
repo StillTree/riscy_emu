@@ -8,12 +8,18 @@ namespace riscy_emu {
 
 class machine {
 public:
+	machine() = default;
+	machine(const machine&) = delete;
+	auto operator=(const machine&) -> machine& = delete;
+	machine(machine&&) = delete;
+	auto operator=(machine&&) -> machine& = delete;
+
 	auto run() -> void;
 
 private:
-	hart_state hart;
 	mem_bus bus;
-	usz cycle_num;
+	hart_state hart { &bus };
+	usz cycle_num { 0 };
 };
 
 }

@@ -212,7 +212,7 @@ namespace {
 
 }
 
-auto decode(u32 raw) -> inst::handler
+auto decode_inst(u32 raw) -> inst::handler
 {
 	u8 opcode = static_cast<u8>(raw & 0x7f);
 

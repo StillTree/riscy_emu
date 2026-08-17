@@ -1,5 +1,6 @@
 #pragma once
 
+#include "trap.hpp"
 #include "typedefs.hpp"
 
 #include <cstdlib>
@@ -56,11 +57,15 @@ struct csr_state {
 	[[nodiscard]] auto read(u16 addr) const -> u64;
 
 private:
-	struct mstatus mstatus { };
+	[[nodiscard]] auto handle_trap(trap_cause cause) -> u64;
+
+	struct mstatus mstatus;
 	u64 mcause { 0 };
 	u64 mepc { 0 };
 	u64 mtvec { 0 };
 	u64 mnstatus { 0 };
+
+	friend class hart_state;
 };
 
 }

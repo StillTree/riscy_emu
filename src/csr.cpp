@@ -1,4 +1,5 @@
 #include "csr.hpp"
+#include <exception>
 
 namespace riscy_emu {
 
@@ -105,6 +106,22 @@ auto csr_state::read(u16 addr) const -> u64
 	default:
 		std::abort();
 	}
+}
+
+auto csr_state::handle_trap(trap_cause cause, u64 cur_pc) -> u64
+{
+	auto mie = mstatus.mie();
+	mstatus.mpie(mie);
+	mstatus.mie(false);
+
+	mcause = static_cast<u64>(cause);
+	mepc = cur_pc;
+
+	if ((mtvec & 3) != 0) {
+		std::terminate();
+	}
+
+	return mtvec & ~3ULL;
 }
 
 }
